@@ -1,0 +1,15 @@
+# socketio: expired token, then bad signature
+# connect /socket.io/?EIO=4&transport=websocket
+< 0{"sid":"FDC74DEF968927AF0E2E3E893049591C","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"maxPayload":16777216}
+> 40
+< 40{"sid":"FDC74DEF968927AF0E2E3E893049591C"}
+> 42["connect_document",{"tenantId":"fluid","id":"wire-sio-authfail","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb2N1bWVudElkIjoid2lyZS1zaW8tYXV0aGZhaWwiLCJ0ZW5hbnRJZCI6ImZsdWlkIiwic2NvcGVzIjpbImRvYzpyZWFkIiwiZG9jOndyaXRlIiwic3VtbWFyeTpyZWFkIiwic3VtbWFyeTp3cml0ZSJdLCJ1c2VyIjp7ImlkIjoid2lyZWRpZmYtdXNlciJ9LCJ2ZXIiOiIxLjAiLCJpYXQiOjE3ODYxMjIzNjIsImV4cCI6MTc4NjEyNTk2MiwianRpIjoiMGE0YTI1ZmMxMGQ0N2JjYjg5YTliMjYyYjIxNDUyZjkifQ.fJsvG47-aykOmo9v7YJdE1CunqIM9rw2DPV13z6E3HE","mode":"write","client":{"mode":"write","details":{"capabilities":{"interactive":true},"environment":"wirediff"},"permission":[],"scopes":["doc:read","doc:write","summary:read","summary:write"],"user":{"id":"u","name":"U"}},"versions":["^0.4.0","^0.3.0","^0.2.0","^0.1.0"],"nonce":"wirediff-nonce"}]
+< 42["connect_document_error",{"reason":"unauthorized"}]
+# server closed: 1000 done
+# connect /socket.io/?EIO=4&transport=websocket
+> 40
+< 0{"sid":"2D91D357AE16ADFE703A8316BE59001B","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"maxPayload":16777216}
+> 42["connect_document",{"tenantId":"fluid","id":"wire-sio-authfail","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb2N1bWVudElkIjoid2lyZS1zaW8tYXV0aGZhaWwiLCJ0ZW5hbnRJZCI6ImZsdWlkIiwic2NvcGVzIjpbImRvYzpyZWFkIiwiZG9jOndyaXRlIiwic3VtbWFyeTpyZWFkIiwic3VtbWFyeTp3cml0ZSJdLCJ1c2VyIjp7ImlkIjoid2lyZWRpZmYtdXNlciJ9LCJ2ZXIiOiIxLjAiLCJpYXQiOjE3ODYxMjk1NjIsImV4cCI6MTc4NjEzMzE2MiwianRpIjoiYWMxZGRkOTkwZGVmZjg2Y2M2NTdjNWNmMzc1MjNhOTQifQ.BHiPsEvt1o5WwmOZ8gvJs7Gzc5wSC7D3AFWdZPnLdWI","mode":"write","client":{"mode":"write","details":{"capabilities":{"interactive":true},"environment":"wirediff"},"permission":[],"scopes":["doc:read","doc:write","summary:read","summary:write"],"user":{"id":"u","name":"U"}},"versions":["^0.4.0","^0.3.0","^0.2.0","^0.1.0"],"nonce":"wirediff-nonce"}]
+< 40{"sid":"2D91D357AE16ADFE703A8316BE59001B"}
+< 42["connect_document_error",{"reason":"unauthorized"}]
+# server closed: 1000 done

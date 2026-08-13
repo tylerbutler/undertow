@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <PublishReadyToRun>true</PublishReadyToRun>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Undertow.Protocol/Undertow.Protocol.fsproj" />
+    <ProjectReference Include="../Undertow.Abstractions/Undertow.Abstractions.csproj" />
+    <ProjectReference Include="../Undertow.Runtime/Undertow.Runtime.csproj" />
+    <ProjectReference Include="../Undertow.Transports/Undertow.Transports.csproj" />
+    <ProjectReference Include="../Undertow.Storage.Memory/Undertow.Storage.Memory.csproj" />
+    <ProjectReference Include="../Undertow.Storage.Sqlite/Undertow.Storage.Sqlite.csproj" />
+  </ItemGroup>
+</Project>

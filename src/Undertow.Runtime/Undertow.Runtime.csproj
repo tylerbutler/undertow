@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Undertow.Abstractions/Undertow.Abstractions.csproj" />
+    <ProjectReference Include="../Undertow.Protocol/Undertow.Protocol.fsproj" />
+  </ItemGroup>
+</Project>

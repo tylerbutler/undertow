@@ -1,0 +1,34 @@
+# Build artifacts — the image restores and builds these from source.
+**/bin
+**/obj
+artifacts
+TestResults
+
+# Local SQLite storage; the container uses UNDERTOW_DATA_DIR=/data.
+*.db
+*.db-shm
+*.db-wal
+
+# Not copied by the Dockerfile, but keep them out of the build context.
+tests
+tools
+dotnet-tools.json
+
+# Git
+.git
+.gitignore
+
+# Editor/IDE
+.vs
+.vscode
+.idea
+*.user
+*.swp
+*.swo
+*~
+
+# Docs and tooling that do not affect the build
+*.md
+Dockerfile
+docker-compose*.yml
+.dockerignore

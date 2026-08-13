@@ -1,0 +1,15 @@
+# rest: health, token-mint, create document, session, deltas
+> GET /health
+< HTTP 200 {"status":"ok"}
+> HEAD /health
+< HTTP 200 
+> POST /api/tenants/fluid/token-mint {"documentId":"wire-rest-doc"}
+< HTTP 200 {"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb2N1bWVudElkIjoid2lyZS1yZXN0LWRvYyIsInRlbmFudElkIjoiZmx1aWQiLCJzY29wZXMiOlsiZG9jOnJlYWQiLCJkb2M6d3JpdGUiLCJzdW1tYXJ5OnJlYWQiLCJzdW1tYXJ5OndyaXRlIl0sInVzZXIiOnsiaWQiOiJmbG9vZGdhdGUtdG9rZW4tbWludCJ9LCJ2ZXIiOiIxLjAiLCJpYXQiOjE3ODYxMjk1NjIsImV4cCI6MTc4NjEzMzE2MiwianRpIjoiMTBmNTFlODJkODRmODE0MGJjODk1YTk4ZTRkYTEzYTkifQ.fraRvv7NVhwNyJ7jNG0aITyX3YAr1Z-lU69n4Qet7F4","expiresIn":3600,"user":{"id":"floodgate-token-mint","name":"Floodgate Token Mint"}}
+> POST /documents/fluid {"id":"wire-rest-doc"}
+< HTTP 201 "wire-rest-doc"
+> GET /documents/fluid/session/wire-rest-doc
+< HTTP 200 {"ordererUrl":"http://localhost:4000","historianUrl":"http://localhost:4000/repos/fluid","deltaStreamUrl":"http://localhost:4000","isSessionAlive":true,"isSessionActive":true}
+> GET /deltas/fluid/wire-rest-doc
+< HTTP 200 {"value":[]}
+> GET /deltas/fluid/wire-rest-doc
+< HTTP 401 {"error":"Missing Authorization header"}

@@ -1,0 +1,43 @@
+# Docker Compose for the standalone Undertow server.
+#
+# Mirrors Floodgate's container contract so the same integration suites can be
+# pointed at either stack (Gleam Floodgate or .NET Undertow). While the shadow
+# differ is live, the FLOODGATE_* config fallback means either compose file can
+# drive either binary with only `image:` swapped.
+#
+# Usage:
+#   docker compose up -d --wait     # Start (builds from local source)
+#   docker compose down -v          # Stop and drop the storage volume
+#   docker compose logs -f undertow
+
+services:
+  undertow:
+    image: undertow:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - UNDERTOW_TENANT_ID=fluid
+      # Matches LEVEE_TENANT_KEY in the levee-driver compose file so the
+      # existing Levee integration suites authenticate unchanged.
+      - UNDERTOW_JWT_SECRET=dev-tenant-secret-key
+      - UNDERTOW_TOKEN_MINT_SECRET=dev-token-mint-secret
+      - UNDERTOW_PUBLIC_URL=http://localhost:3000
+      # Browser clients are served from another origin in the examples.
+      - UNDERTOW_ALLOWED_ORIGINS=*
+      - UNDERTOW_STORAGE_BACKEND=shelf
+      - UNDERTOW_DATA_DIR=/data
+    volumes:
+      - undertow-data:/data
+    healthcheck:
+      test: ["CMD", "/app/Undertow.Server", "--healthcheck"]
+      interval: 5s
+      timeout: 3s
+      start_period: 15s
+      retries: 5
+
+volumes:
+  undertow-data:

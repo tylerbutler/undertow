@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Undertow.Protocol/Undertow.Protocol.fsproj" />
+    <Project Path="src/Undertow.Abstractions/Undertow.Abstractions.csproj" />
+    <Project Path="src/Undertow.Runtime/Undertow.Runtime.csproj" />
+    <Project Path="src/Undertow.Transports/Undertow.Transports.csproj" />
+    <Project Path="src/Undertow.Storage.Memory/Undertow.Storage.Memory.csproj" />
+    <Project Path="src/Undertow.Storage.Sqlite/Undertow.Storage.Sqlite.csproj" />
+    <Project Path="src/Undertow.Server/Undertow.Server.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Undertow.Protocol.Tests/Undertow.Protocol.Tests.fsproj" />
+    <Project Path="tests/Undertow.Storage.Tests/Undertow.Storage.Tests.csproj" />
+    <Project Path="tests/Undertow.Server.Tests/Undertow.Server.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Undertow.WireDiff/Undertow.WireDiff.csproj" />
+  </Folder>
+</Solution>

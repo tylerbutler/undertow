@@ -1,0 +1,3 @@
+# phoenix: vsn=1.0.0 must be rejected before upgrade
+# connect /socket/websocket?vsn=1.0.0
+# upgrade rejected: The server returned status code '403' when status code '101' was expected.

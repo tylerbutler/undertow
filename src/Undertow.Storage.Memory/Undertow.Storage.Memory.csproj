@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Undertow.Abstractions/Undertow.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+# socketio: read-mode connect, submitOp must nack
+# connect /socket.io/?EIO=4&transport=websocket
+< 0{"sid":"954230E9318F9E0A8CC60C899382DFDF","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"maxPayload":16777216}
+> 40
+< 40{"sid":"954230E9318F9E0A8CC60C899382DFDF"}
+> 42["connect_document",{"tenantId":"fluid","id":"wire-sio-read","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb2N1bWVudElkIjoid2lyZS1zaW8tcmVhZCIsInRlbmFudElkIjoiZmx1aWQiLCJzY29wZXMiOlsiZG9jOnJlYWQiXSwidXNlciI6eyJpZCI6IndpcmVkaWZmLXJlYWRlciJ9LCJ2ZXIiOiIxLjAiLCJpYXQiOjE3ODYxMjk1NjIsImV4cCI6MTc4NjEzMzE2MiwianRpIjoiZWFmYTEzNDdjY2M3OGUzOTQ0MDYwMzNiNWJhOGI2NWUifQ.ZD0Lz1ZMP1OYHyf2S7OXRFhJvzJ0KOIZV7t0eOaOz3w","mode":"read","client":{"mode":"read","details":{"capabilities":{"interactive":true},"environment":"wirediff"},"permission":[],"scopes":["doc:read","doc:write","summary:read","summary:write"],"user":{"id":"wirediff-reader","name":"Reader"}},"versions":["^0.4.0","^0.3.0","^0.2.0","^0.1.0"],"nonce":"wirediff-nonce"}]
+< 42["connect_document_success",{"claims":{"documentId":"wire-sio-read","scopes":["doc:read"],"tenantId":"fluid","user":{"id":"wirediff-reader"},"iat":1786129562,"exp":1786133162,"ver":"1.0"},"clientId":"954230E9318F9E0A8CC60C899382DFDF","existing":false,"maxMessageSize":16777216,"mode":"read","serviceConfiguration":{"blockSize":65536,"maxMessageSize":16777216},"initialClients":[],"initialMessages":[],"initialSignals":[],"supportedVersions":["^0.1.0","^1.0.0"],"version":"1.0.0","checkpointSequenceNumber":0,"summaryHandle":"","summarySequenceNumber":0}]
+> 42["submitOp","954230E9318F9E0A8CC60C899382DFDF",[[{"clientSequenceNumber":1,"referenceSequenceNumber":0,"type":"op","contents":"{}"}]]]
+< 42["nack","wire-sio-read",[{"operation":null,"sequenceNumber":0,"content":{"code":403,"type":"BadRequestError","message":"Read-only clients cannot submit operations"}}]]
