@@ -15,6 +15,10 @@ wire fixtures captured from the Gleam reference (with the recorded baseline
 pass counts and one documented deliberate divergence) live in
 `tests/fixtures/wire/`.
 
+This repository was extracted from
+[`tylerbutler/levee`](https://github.com/tylerbutler/levee) at commit
+`ec92d7d`; its filtered history preserves the original Undertow commit.
+
 ## Layout
 
 | Project | Language | Contents |
@@ -35,9 +39,9 @@ dotnet test Undertow.slnx
 UNDERTOW_JWT_SECRET=dev-tenant-secret-key dotnet run --project src/Undertow.Server
 ```
 
-Or from the repo root: `just build-undertow`, `just test-undertow`,
-`just undertow-server`, and the conformance gate `just test-undertow-dual-mode`
-(38 Routerlicious + 7 Phoenix/cross-mode tests against one process).
+Or use `just setup`, `just build`, `just test`, `just run`, and `just
+test-dual-mode`. The conformance gate runs Floodgate's Routerlicious and
+Phoenix/cross-mode suites against one Undertow process.
 
 ## Configuration
 

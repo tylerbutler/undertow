@@ -6,7 +6,7 @@
 # surface. See docs/plans/2026-08-06-undertow-plan.md.
 #
 # Build from the undertow directory:
-#   docker build -t undertow:local server/undertow
+#   docker build -t undertow:local .
 
 # === Stage 1: Build ===
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS builder

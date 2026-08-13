@@ -3,7 +3,7 @@
 Raw frame transcripts captured from the **Gleam Floodgate** reference server by
 `tools/Undertow.WireDiff` (`record` mode). These are the byte-level contract the
 .NET Undertow implementation is held to. See `SOURCE.txt` for the exact source
-commit and capture time. Captured from floodgate at Levee commit `2687b5f`
+commit and capture time. Captured from Floodgate at commit `2687b5f`
 (> `22cf469`, so the second gap-closure landing — Engine.IO ping timeout,
 op-history cap, idle eviction, `42["close"]`, signal targeting, per-document
 sequencing — is baked in).
@@ -30,7 +30,7 @@ fixtures no longer show the client's own presence-join signal there.
 
 ## Baseline conformance counts (Gleam Floodgate at `2687b5f`)
 
-Recorded 2026-08-07 via `just test-floodgate-dual-mode`:
+Recorded 2026-08-07 via the Floodgate dual-mode conformance gate:
 
 - Routerlicious suite: **38 passed**, 3 skipped, 1 todo
 - Phoenix + cross-mode suite: **7 passed**
