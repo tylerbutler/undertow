@@ -7,3 +7,6 @@ artifacts/
 *.db
 *.db-shm
 *.db-wal
+
+# impeccable local config
+.impeccable/config.local.json

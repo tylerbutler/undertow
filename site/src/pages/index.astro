@@ -1,0 +1,937 @@
+---
+import '@fontsource/archivo-narrow/700.css';
+import '@fontsource-variable/archivo';
+import '@fontsource/fragment-mono';
+
+const GITHUB = 'https://github.com/tylerbutler/undertow';
+
+const conformance = [
+	{
+		suite: 'Routerlicious conformance',
+		gate: 'just test-dual-mode',
+		result: '38 pass',
+		detail: '3 skipped · 1 todo',
+		note: 'a',
+	},
+	{
+		suite: 'Phoenix + cross-mode conformance',
+		gate: 'just test-dual-mode',
+		result: '7 pass',
+		detail: 'both protocols, one process',
+		note: null,
+	},
+	{
+		suite: 'Drop-in parity vs. Levee suite',
+		gate: 'levee integration suites',
+		result: '53 / 54',
+		detail: 'one intentional 401',
+		note: 'b',
+	},
+	{
+		suite: 'Readiness checks',
+		gate: 'startup probes',
+		result: '8 / 8',
+		detail: 'health, auth, storage',
+		note: null,
+	},
+	{
+		suite: 'levee-example integration',
+		gate: 'example app suite',
+		result: '15 pass',
+		detail: 'levee-client against Undertow',
+		note: null,
+	},
+	{
+		suite: 'Unit + integration tests',
+		gate: 'dotnet test Undertow.slnx',
+		result: '187 pass',
+		detail: 'all tiers',
+		note: null,
+	},
+	{
+		suite: 'todo-list multi-user e2e',
+		gate: 'live browser flow',
+		result: '9 / 9',
+		detail: 'real container loader',
+		note: 'c',
+	},
+];
+
+const params = [
+	{ key: 'UNDERTOW_JWT_SECRET', def: '— required', note: 'Tenant JWT signing secret. The server refuses to start without it.', req: true },
+	{ key: 'PORT', def: '3000', note: 'Listen port. PORT wins over UNDERTOW_PORT.', req: false },
+	{ key: 'UNDERTOW_BIND', def: 'localhost', note: 'Bind address.', req: false },
+	{ key: 'UNDERTOW_TENANT_ID', def: 'fluid', note: 'Tenant id used in topics and tokens.', req: false },
+	{ key: 'UNDERTOW_STORAGE_BACKEND', def: 'ets', note: 'ets / shelf = SQLite (WAL); memory = in-process only.', req: false },
+	{ key: 'UNDERTOW_DATA_DIR', def: 'priv/undertow_data', note: 'SQLite data directory.', req: false },
+	{ key: 'UNDERTOW_MAX_FRAME_BYTES', def: '16777216', note: 'Frame cap; also advertised in the Engine.IO open and IConnected.', req: false },
+	{ key: 'UNDERTOW_MAX_CONNECTIONS', def: '4096', note: 'Connection ceiling. Per-IP ceiling: 256. 0 = unlimited.', req: false },
+	{ key: 'UNDERTOW_MESSAGE_RATE', def: '1000', note: 'Messages/sec per connection; burst 2000. 0 = unlimited.', req: false },
+	{ key: 'UNDERTOW_HEARTBEAT_INTERVAL_MS', def: '30000', note: 'Heartbeat cadence; timeout 60000 ms.', req: false },
+	{ key: 'UNDERTOW_DOC_IDLE_MS', def: '300000', note: 'Idle-document eviction window.', req: false },
+	{ key: 'UNDERTOW_ALLOWED_ORIGINS', def: '(unset)', note: 'Origin allow-list for browser clients; * allows all.', req: false },
+];
+
+const chapters = [
+	{ n: '1', title: 'Introduction', href: '/manual/', desc: 'What Undertow is, what it serves, and what it was ported from.' },
+	{ n: '2', title: 'Operating procedure', href: '/manual/operating-procedure/', desc: 'Clone, start with Docker or the .NET SDK, verify, connect a client.' },
+	{ n: '3', title: 'Configuration', href: '/manual/configuration/', desc: 'The full UNDERTOW_* parameter table, precedence, and fallbacks.' },
+	{ n: '4', title: 'Wire protocols', href: '/manual/protocols/', desc: 'Socket.IO and Phoenix Channels V2 frame formats, topics, and REST.' },
+	{ n: '5', title: 'Conformance & fixtures', href: '/manual/conformance/', desc: 'The recorded results, the gates, and the golden wire transcripts.' },
+	{ n: '6', title: 'Divergence notes', href: '/manual/divergences/', desc: 'Every deliberate departure from the reference servers, in full.' },
+	{ n: '7', title: 'Internal organization', href: '/manual/architecture/', desc: 'The pure F# tier, the C# runtime, transports, storage, and host.' },
+	{ n: '8', title: 'Lineage', href: '/manual/lineage/', desc: 'Floodgate, Levee, and how this repository was extracted.' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Undertow — Fluid Framework–compatible document service · reference data</title>
+		<meta
+			name="description"
+			content="Undertow is a Fluid Framework–compatible collaborative document service in .NET: one process, one port, two wire protocols plus REST. Operating procedure, parameters, and the recorded conformance data."
+		/>
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="canonical" href="https://undertow.tylerbutler.com/" />
+		<meta property="og:title" content="Undertow — reference data" />
+		<meta
+			property="og:description"
+			content="Fluid Framework–compatible document service in .NET. One process, one port, two wire protocols + REST. Stated as reference data: procedure, parameters, conformance record."
+		/>
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://undertow.tylerbutler.com/" />
+	</head>
+	<body>
+		<!--
+		THESIS: Undertow stated as reference data — an operating procedure, parameter tables,
+		field diagrams, a conformance record with footnotes. Refuses the dev-tool default
+		(dark hero, animated terminal, feature grid); the tables ARE the page.
+		OWN-WORLD: programmer's reference card / DEC handbook. Pale card stock, blue-black
+		table ink, deep handbook teal carrying cover, manual index, and colophon; red only
+		for notes and stamps; green-card tint on alternating rows. Condensed grotesque caps
+		in solid ink section bars; Helvetica-flavored mono for data; double-rule tables;
+		fold creases between panels.
+		STORY: a developer reads what this is, runs the three-step procedure, checks the
+		recorded conformance data and its divergence notes, then opens the manual.
+		FIRST VIEWPORT: teal cover band — doc code, UNDERTOW, subtitle, spec strip, two
+		actions — with §1 OPERATING PROCEDURE and FIG. 1 breaking into view beneath.
+		FORM: programmer's reference card; candidate 7 of the grounded list; seed 9d50a094.
+		FINISH: unreviewed and undocumented is unfinished; this build ends with the finish
+		review, the verdict, and DESIGN.md.
+		-->
+		<a class="skip" href="#procedure">Skip to operating procedure</a>
+		<div class="frame" aria-hidden="true"></div>
+
+		<header class="topbar">
+			<span class="doc-code">UND-1 · REFERENCE DATA</span>
+			<nav aria-label="Site">
+				<a href="/manual/">Manual</a>
+				<a href={GITHUB}>Source</a>
+			</nav>
+		</header>
+
+		<main>
+			<section class="cover" aria-labelledby="cover-title">
+				<div class="wrap">
+				<p class="doc-code cover-code">
+					<span>FIRST EDITION</span>
+					<span>REV. 2026-08</span>
+				</p>
+				<h1 id="cover-title">Undertow</h1>
+				<p class="cover-sub">
+					A Fluid Framework–compatible collaborative document service in .NET, wire-compatible
+					with the Gleam Floodgate server it was ported from and with the Levee Elixir server
+					for the Phoenix protocol.
+				</p>
+				<ul class="spec-strip" aria-label="Summary specification">
+					<li>One process</li>
+					<li>One port</li>
+					<li>Two wire protocols</li>
+					<li>+ REST</li>
+				</ul>
+				<div class="cover-actions">
+					<a class="btn btn-solid" href="#procedure">Operating procedure&nbsp;→&nbsp;§1</a>
+					<a class="btn btn-line" href="/manual/">Open the manual</a>
+				</div>
+				</div>
+			</section>
+
+			<div class="crease" aria-hidden="true"></div>
+
+			<section id="procedure" class="panel" aria-labelledby="s1">
+				<h2 class="bar" id="s1"><span class="bar-n">§1</span> Operating procedure</h2>
+				<div class="split">
+					<div class="proc-box">
+						<ol class="proc">
+							<li>
+								<div class="proc-body">
+									<p><strong>Obtain the source.</strong> Undertow ships as source — there is no
+									package to install.</p>
+									<div class="cmd">
+										<code>git clone {GITHUB}.git && cd undertow</code>
+										<button class="copy" data-copy={`git clone ${GITHUB}.git && cd undertow`}>Copy</button>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="proc-body">
+									<p><strong>Start the server.</strong> Builds the container from local source and
+									waits for the healthcheck.</p>
+									<div class="cmd">
+										<code>docker compose up -d --wait</code>
+										<button class="copy" data-copy="docker compose up -d --wait">Copy</button>
+									</div>
+									<p class="alt">Without Docker (needs the .NET SDK):<sup><a class="fn" href="#note-d" aria-label="Note d">d</a></sup></p>
+									<div class="cmd cmd-alt">
+										<code><span class="nb">UNDERTOW_JWT_SECRET=dev-tenant-secret-key</span> dotnet run <span class="nb">--project src/Undertow.Server</span></code>
+										<button class="copy" data-copy="UNDERTOW_JWT_SECRET=dev-tenant-secret-key dotnet run --project src/Undertow.Server">Copy</button>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="proc-body">
+									<p><strong>Verify, then connect.</strong> Point an official Fluid/Routerlicious
+									driver or a levee-client at port 3000.</p>
+									<div class="cmd">
+										<code>curl http://localhost:3000/health</code>
+										<button class="copy" data-copy="curl http://localhost:3000/health">Copy</button>
+									</div>
+								</div>
+							</li>
+						</ol>
+					</div>
+
+					<figure class="fig" aria-labelledby="fig1-cap">
+						<div class="fig-bracket"><span>One port · :3000</span></div>
+						<div class="fields fields-3">
+							<div class="field">
+								<code class="field-k">/socket.io/</code>
+								<p class="field-d">Engine.IO v4 / Socket.IO v5 — official Fluid &amp; Routerlicious drivers</p>
+							</div>
+							<div class="field">
+								<code class="field-k">/socket/<wbr />websocket</code>
+								<p class="field-d">Phoenix Channels V2 — levee-driver &amp; levee-client</p>
+							</div>
+							<div class="field">
+								<code class="field-k">REST</code>
+								<p class="field-d">documents · deltas · token mint · git-like Historian storage</p>
+							</div>
+						</div>
+						<figcaption id="fig1-cap"><span class="fig-n">Fig. 1</span> Endpoint assignment. One
+						process serves all three surfaces from a single port.</figcaption>
+					</figure>
+				</div>
+			</section>
+
+			<div class="crease" aria-hidden="true"></div>
+
+			<section class="panel" aria-labelledby="s2">
+				<h2 class="bar" id="s2"><span class="bar-n">§2</span> Wire formats</h2>
+				<div class="split">
+					<figure class="fig" aria-labelledby="fig2-cap">
+						<div class="fig-bracket"><span>Socket.IO event frame</span></div>
+						<div class="fields">
+							<div class="field field-fixed">
+								<code class="field-k">4</code>
+								<p class="field-d">Engine.IO<br />MESSAGE</p>
+							</div>
+							<div class="field field-fixed">
+								<code class="field-k">2</code>
+								<p class="field-d">Socket.IO<br />EVENT</p>
+							</div>
+							<div class="field">
+								<code class="field-k">["op", …payload]</code>
+								<p class="field-d">JSON array — event name, then arguments</p>
+							</div>
+						</div>
+						<figcaption id="fig2-cap"><span class="fig-n">Fig. 2</span> A <code>42["op",…]</code>
+						frame as the drivers send it. The Fluid <code>clientId</code> is the Engine.IO
+						<code>sid</code> itself.</figcaption>
+					</figure>
+
+					<figure class="fig" aria-labelledby="fig3-cap">
+						<div class="fig-bracket"><span>Phoenix Channels V2 frame</span></div>
+						<div class="fields fields-5">
+							<div class="field"><code class="field-k">join_ref</code></div>
+							<div class="field"><code class="field-k">ref</code></div>
+							<div class="field"><code class="field-k">topic</code></div>
+							<div class="field"><code class="field-k">event</code></div>
+							<div class="field"><code class="field-k">payload</code></div>
+						</div>
+						<figcaption id="fig3-cap"><span class="fig-n">Fig. 3</span> Five-element JSON array.
+						Document topics take the form <code>document:&lbrace;tenant&rbrace;:&lbrace;documentId&rbrace;</code>.</figcaption>
+					</figure>
+				</div>
+				<aside class="legend">
+					<h3>Transcript conventions</h3>
+					<p>The golden fixtures in <code>tests/fixtures/wire/</code> are raw frame transcripts
+					captured from the Gleam reference server. Line prefixes: <code>&gt;</code> sent to
+					server · <code>&lt;</code> received · <code>#</code> annotation ·
+					<code>&gt;A</code>/<code>&lt;B</code> socket label in multi-socket scenarios.</p>
+				</aside>
+			</section>
+
+			<div class="crease" aria-hidden="true"></div>
+
+			<section class="panel" aria-labelledby="s3">
+				<h2 class="bar" id="s3"><span class="bar-n">§3</span> Conformance record</h2>
+				<p class="table-intro">Recorded 2026-08-07 against the Gleam Floodgate reference at <code>2687b5f</code>. The byte-level contract lives in <a href="/manual/conformance/">the golden wire fixtures</a>; counts move with the repository, and the fixtures — not this card — are the authority.</p>
+				<table class="ct">
+					<thead>
+						<tr><th scope="col">Suite</th><th scope="col">Gate</th><th scope="col" class="num">Result</th><th scope="col">Remarks</th></tr>
+					</thead>
+					<tbody>
+						{conformance.map((r) => (
+							<tr>
+								<th scope="row">{r.suite}{r.note && <sup><a class="fn" href={`#note-${r.note}`} aria-label={`Note ${r.note}`}>{r.note}</a></sup>}</th>
+								<td><code>{r.gate}</code></td>
+								<td class="num">{r.result}</td>
+								<td>{r.detail}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</section>
+
+			<div class="crease" aria-hidden="true"></div>
+
+			<section class="panel" aria-labelledby="s4">
+				<h2 class="bar" id="s4"><span class="bar-n">§4</span> Notes — deliberate divergence</h2>
+				<p class="table-intro">Undertow departs from its references only on purpose, and every
+				departure is written down. The full accounting is in <a href="/manual/divergences/">manual §6</a> and <code>tests/fixtures/wire/README.md</code>.</p>
+				<ol class="notes">
+					<li id="note-a"><span class="note-n">a</span><p>The 3 skipped and 1 todo are the reference suite's own baseline at capture time — Floodgate posts the same counts.</p></li>
+					<li id="note-b"><span class="note-n">b</span><p>The single non-passing parity case is an <em>intentional</em> 401 response, recorded as ADR-009.</p></li>
+					<li id="note-c"><span class="note-n">c</span><p>Passing 9/9 required echoing the supplied IClient verbatim rather than key-sorted: the container loader's assert 0x4b2 demands byte-identity with the object the client sent. The Gleam reference tripped this in live browser flows; both servers now also pin <code>initialSignals</code> to <code>[]</code>, matching Levee.</p></li>
+					<li id="note-d"><span class="note-n">d</span><p><code>dev-tenant-secret-key</code> is the development secret used by the example suites. Set your own <code>UNDERTOW_JWT_SECRET</code> anywhere that is not a laptop.</p></li>
+					<li id="note-e"><span class="note-n">e</span><p>A Phoenix join with <code>vsn=1.0.0</code> is rejected <code>403</code> before the WebSocket upgrade — the fixtures pin 403, not the 400 an earlier plan assumed.</p></li>
+				</ol>
+			</section>
+
+			<div class="crease" aria-hidden="true"></div>
+
+			<section class="panel" aria-labelledby="s5">
+				<h2 class="bar" id="s5"><span class="bar-n">§5</span> Parameters</h2>
+				<p class="table-intro">Configuration is read from environment variables at startup.
+				Every <code>UNDERTOW_*</code> key transitionally falls back to its <code>FLOODGATE_*</code> spelling, so one compose file can drive either binary; the
+				source of each value is logged at startup. Full table: <a href="/manual/configuration/">manual §3</a>.</p>
+				<table class="ct params">
+					<thead>
+						<tr><th scope="col">Parameter</th><th scope="col">Default</th><th scope="col">Purpose</th></tr>
+					</thead>
+					<tbody>
+						{params.map((p) => (
+							<tr>
+								<th scope="row"><code>{p.key}</code>{p.req && <span class="req" title="Required">●</span>}</th>
+								<td class="num">{p.def}</td>
+								<td>{p.note}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+				<p class="table-foot"><span class="req">●</span> required — the server refuses to start
+				without it. For rate and connection limits, <code>0</code> means unlimited.</p>
+			</section>
+
+			<div class="crease" aria-hidden="true"></div>
+
+			<section class="manual-toc" aria-labelledby="s6">
+				<div class="wrap">
+				<h2 class="bar bar-inverse" id="s6"><span class="bar-n">§6</span> The manual</h2>
+				<p class="toc-intro">The card states the facts; the manual explains them. Eight chapters,
+				drawn from the same repository the server builds from.</p>
+				<ul class="toc">
+					{chapters.map((c) => (
+						<li>
+							<a href={c.href}>
+								<span class="toc-n">{c.n}</span>
+								<span class="toc-t">{c.title}</span>
+								<span class="toc-d">{c.desc}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+				</div>
+			</section>
+		</main>
+
+		<footer class="colophon">
+			<div class="wrap">
+			<p>Undertow is the .NET reimplementation of <strong>Floodgate</strong> (Gleam), wire-compatible
+			with the <strong>Levee</strong> Elixir server for the Phoenix protocol. Extracted from
+			<code>tylerbutler/levee</code> at <code>ec92d7d</code> with its history preserved.</p>
+			<p>MIT license · <a href={GITHUB}>github.com/tylerbutler/undertow</a> · ships as source;
+			clone and build.</p>
+			</div>
+		</footer>
+
+		<script>
+			// Copy buttons: stamp a COPIED mark on success.
+			for (const btn of document.querySelectorAll<HTMLButtonElement>('.copy')) {
+				btn.addEventListener('click', async () => {
+					try {
+						await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+					} catch {
+						return;
+					}
+					const old = btn.querySelector('.stamp');
+					old?.remove();
+					const stamp = document.createElement('span');
+					stamp.className = 'stamp';
+					stamp.textContent = 'COPIED';
+					btn.append(stamp);
+					setTimeout(() => stamp.remove(), 1400);
+				});
+			}
+
+			// The fold: panels settle flat as they enter. Visible by default; motion only adds.
+			const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+			if (!reduced && 'IntersectionObserver' in window) {
+				const io = new IntersectionObserver(
+					(entries) => {
+						for (const e of entries) {
+							if (e.isIntersecting) {
+								e.target.classList.add('unfolded');
+								io.unobserve(e.target);
+							}
+						}
+					},
+					{ rootMargin: '0px 0px -8% 0px' },
+				);
+				const first = document.querySelector('#procedure');
+				if (first) {
+					first.classList.add('folded');
+					io.observe(first);
+				}
+			}
+		</script>
+
+		<style>
+			:root {
+				--stock: #f5f3ea;
+				--stock-tint: #e9efdf;
+				--ink: #1c2427;
+				--ink-soft: #44525a;
+				--rule: rgba(28, 36, 39, 0.35);
+				--rule-faint: rgba(28, 36, 39, 0.16);
+				--teal: #0d5460;
+				--teal-deep: #0a434d;
+				--on-teal: #f2efe4;
+				--on-teal-soft: #bcd7d6;
+				--red: #b23a26;
+				--fs-body: 1rem;
+			}
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--stock: #121d21;
+					--stock-tint: rgba(122, 155, 87, 0.1);
+					--ink: #e6e2d3;
+					--ink-soft: #a8b4ae;
+					--rule: rgba(230, 226, 211, 0.4);
+					--rule-faint: rgba(230, 226, 211, 0.16);
+					--teal: #0c4750;
+					--teal-deep: #093a42;
+					--on-teal: #eae7da;
+					--on-teal-soft: #a9cccb;
+					--red: #e0694f;
+				}
+			}
+
+			* { box-sizing: border-box; }
+			html { scroll-behavior: smooth; scroll-padding-top: 4rem; }
+			body {
+				margin: 0;
+				background: var(--stock);
+				color: var(--ink);
+				font-family: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+				font-size: var(--fs-body);
+				line-height: 1.55;
+				-webkit-font-smoothing: antialiased;
+			}
+			code {
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				font-size: 0.86em;
+			}
+			a { color: var(--teal); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+			@media (prefers-color-scheme: dark) {
+				a { color: #7cc4c2; }
+			}
+
+			.skip {
+				position: absolute;
+				left: 1rem;
+				top: -3rem;
+				z-index: 20;
+				background: var(--ink);
+				color: var(--stock);
+				padding: 0.5rem 1rem;
+				font-size: 0.85rem;
+				transition: top 0.15s ease-out;
+			}
+			.skip:focus { top: 1rem; }
+
+			/* Printed card frame around the viewport */
+			.frame {
+				position: fixed;
+				inset: 10px;
+				border: 1px solid var(--rule);
+				outline: 1px solid var(--rule-faint);
+				outline-offset: 3px;
+				pointer-events: none;
+				z-index: 10;
+			}
+			@media (max-width: 720px) { .frame { display: none; } }
+
+			.topbar {
+				position: sticky;
+				top: 0;
+				z-index: 5;
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				gap: 1rem;
+				padding: 0.7rem clamp(1.25rem, 4vw, 3rem);
+				background: var(--stock);
+				border-bottom: 3px double var(--rule);
+			}
+			.doc-code {
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				font-size: 0.72rem;
+				letter-spacing: 0.09em;
+				text-transform: uppercase;
+				color: var(--ink-soft);
+			}
+			.topbar nav { display: flex; gap: 1.4rem; }
+			.topbar nav a {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				font-size: 0.85rem;
+				color: var(--ink);
+				text-decoration: none;
+				border-bottom: 2px solid transparent;
+			}
+			.topbar nav a:hover, .topbar nav a:focus-visible { border-bottom-color: var(--red); }
+
+			main { display: block; }
+			.panel, .cover, .manual-toc {
+				padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 3rem);
+			}
+			.panel { max-width: calc(1120px + 2 * clamp(1.25rem, 4vw, 3rem)); margin-inline: auto; }
+			.wrap { max-width: 1120px; margin-inline: auto; }
+
+			/* ---- Cover ---- */
+			.cover {
+				background: var(--teal);
+				color: var(--on-teal);
+				padding-top: clamp(2.5rem, 6vh, 4.5rem);
+				padding-bottom: clamp(2.5rem, 6vh, 4rem);
+			}
+			.cover-code {
+				display: flex;
+				justify-content: space-between;
+				gap: 1rem;
+				color: var(--on-teal-soft);
+				border-bottom: 1px solid color-mix(in srgb, var(--on-teal) 30%, transparent);
+				padding-bottom: 0.6rem;
+				margin: 0 0 1.2rem;
+			}
+			.cover h1 {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				font-size: clamp(3.4rem, 9vw, 6rem);
+				line-height: 0.94;
+				letter-spacing: -0.01em;
+				margin: 0 0 1rem;
+			}
+			.cover-sub {
+				font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+				line-height: 1.5;
+				max-width: 62ch;
+				margin: 0 0 1.8rem;
+				color: var(--on-teal);
+			}
+			.spec-strip {
+				list-style: none;
+				display: flex;
+				flex-wrap: wrap;
+				padding: 0;
+				margin: 0 0 2rem;
+				border-top: 3px double color-mix(in srgb, var(--on-teal) 55%, transparent);
+				border-bottom: 1px solid color-mix(in srgb, var(--on-teal) 30%, transparent);
+			}
+			.spec-strip li {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				font-size: 0.9rem;
+				padding: 0.55rem 1.1rem 0.55rem 0;
+				margin-right: 1.1rem;
+				border-right: 1px solid color-mix(in srgb, var(--on-teal) 30%, transparent);
+			}
+			.spec-strip li:last-child { border-right: 0; }
+			.cover-actions { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+			.btn {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.95rem;
+				text-decoration: none;
+				padding: 0.75rem 1.4rem;
+				border: 1px solid var(--on-teal);
+			}
+			.btn-solid { background: var(--on-teal); color: var(--teal-deep); }
+			.btn-solid:hover, .btn-solid:focus-visible { background: #fff; border-color: #fff; }
+			@media (prefers-color-scheme: dark) {
+				.btn-solid:hover, .btn-solid:focus-visible { background: #f7f4e6; border-color: #f7f4e6; }
+			}
+			.btn-line { color: var(--on-teal); }
+			.btn-line:hover, .btn-line:focus-visible { background: color-mix(in srgb, var(--on-teal) 14%, transparent); }
+
+			/* ---- Creases (the fold) ---- */
+			.crease {
+				height: 14px;
+				background:
+					linear-gradient(to bottom, rgba(28, 36, 39, 0.14), transparent 45%, rgba(255, 255, 255, 0.35) 55%, transparent);
+				border-top: 1px solid var(--rule-faint);
+			}
+			@media (prefers-color-scheme: dark) {
+				.crease {
+					background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 50%, rgba(230, 226, 211, 0.06) 60%, transparent);
+				}
+			}
+			.folded { transform: perspective(1400px) rotateX(-5deg); transform-origin: top center; }
+			.unfolded { transform: perspective(1400px) rotateX(0); transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+
+			/* ---- Section bars ---- */
+			.bar {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.09em;
+				font-size: 1rem;
+				background: var(--ink);
+				color: var(--stock);
+				padding: 0.5rem 0.9rem;
+				margin: 0 0 1.6rem;
+				display: flex;
+				gap: 0.8rem;
+				align-items: baseline;
+			}
+			.bar-n { font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.8rem; color: color-mix(in srgb, var(--stock) 75%, var(--ink)); }
+			.bar-inverse { background: var(--on-teal); color: var(--teal-deep); }
+			.bar-inverse .bar-n { color: color-mix(in srgb, var(--teal-deep) 70%, var(--on-teal)); }
+
+			/* ---- Procedure ---- */
+			.split {
+				display: grid;
+				grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+				gap: clamp(1.5rem, 3vw, 2.5rem);
+				align-items: start;
+			}
+			#procedure .split { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+			@media (max-width: 900px) { .split, #procedure .split { grid-template-columns: minmax(0, 1fr); } }
+
+			.proc { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+			.proc li {
+				counter-increment: step;
+				display: grid;
+				grid-template-columns: 2.6rem minmax(0, 1fr);
+				gap: 0.9rem;
+				padding: 1rem 0;
+				border-bottom: 1px solid var(--rule-faint);
+			}
+			.proc li:first-child { border-top: 3px double var(--rule); }
+			.proc li::before {
+				content: counter(step);
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				font-size: 1.3rem;
+				line-height: 1;
+				border: 1px solid var(--rule);
+				width: 2.2rem;
+				height: 2.2rem;
+				display: grid;
+				place-items: center;
+			}
+			.proc p { margin: 0 0 0.6rem; max-width: 58ch; }
+			.proc .alt { margin-top: 0.6rem; margin-bottom: 0.4rem; font-size: 0.88rem; color: var(--ink-soft); }
+			.cmd-alt { margin-top: 0; }
+			.cmd-alt code { font-size: 0.78em; }
+			.nb { white-space: nowrap; }
+			@media (max-width: 560px) {
+				.cmd { flex-direction: column; }
+				.copy {
+					border-left: 0;
+					border-top: 1px solid var(--rule);
+					padding: 0.45rem 0.9rem;
+					text-align: center;
+				}
+				.stamp { top: auto; bottom: 1.9rem; right: 0.6rem; }
+				.cmd-alt code { font-size: 0.65em; }
+			}
+
+			.cmd {
+				display: flex;
+				align-items: stretch;
+				border: 1px solid var(--rule);
+				background: var(--stock-tint);
+			}
+			.cmd code {
+				flex: 1;
+				padding: 0.6rem 0.8rem;
+				white-space: pre-wrap;
+				overflow-wrap: anywhere;
+				overflow-x: auto;
+			}
+			.copy {
+				position: relative;
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.72rem;
+				border: 0;
+				border-left: 1px solid var(--rule);
+				background: transparent;
+				color: var(--ink);
+				padding: 0 0.9rem;
+				cursor: pointer;
+			}
+			.copy:hover, .copy:focus-visible { background: var(--ink); color: var(--stock); }
+			.stamp {
+				position: absolute;
+				right: 0.3rem;
+				top: -1.4rem;
+				font-family: 'Archivo Narrow', sans-serif;
+				font-size: 0.72rem;
+				letter-spacing: 0.1em;
+				color: var(--red);
+				border: 2px solid var(--red);
+				padding: 0.1rem 0.35rem;
+				transform: rotate(-7deg);
+				background: var(--stock);
+				animation: stamp-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+				pointer-events: none;
+			}
+			@keyframes stamp-in {
+				from { transform: rotate(-7deg) scale(1.6); opacity: 0; }
+				to { transform: rotate(-7deg) scale(1); opacity: 1; }
+			}
+
+			/* ---- Figures / field diagrams ---- */
+			.fig { margin: 0; }
+			.fig-bracket {
+				border: 1px solid var(--rule);
+				border-bottom: 0;
+				height: 1.7rem;
+				position: relative;
+				margin-bottom: 0;
+			}
+			.fig-bracket span {
+				position: absolute;
+				left: 50%;
+				top: -0.05rem;
+				transform: translate(-50%, -50%);
+				background: var(--stock);
+				padding: 0 0.7rem;
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				font-size: 0.72rem;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--ink-soft);
+				white-space: nowrap;
+			}
+			.fields { display: flex; border: 1px solid var(--rule); border-top: 0; }
+			.fields .field {
+				flex: 1;
+				min-width: 0;
+				padding: 0.8rem 0.8rem 0.9rem;
+				border-right: 1px solid var(--rule);
+			}
+			.fields .field:last-child { border-right: 0; }
+			.fields .field-fixed { flex: 0 0 auto; }
+			.field-k {
+				display: block;
+				font-size: 0.95rem;
+				font-weight: 400;
+				overflow-wrap: break-word;
+			}
+			.field-d { margin: 0.4rem 0 0; font-size: 0.78rem; line-height: 1.4; color: var(--ink-soft); }
+			.fields-5 .field { padding: 0.7rem 0.6rem; }
+			.fields-5 .field-k { font-size: 0.82rem; }
+			.fig figcaption {
+				font-size: 0.85rem;
+				color: var(--ink-soft);
+				margin-top: 0.6rem;
+				max-width: 60ch;
+			}
+			.fig-n {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				color: var(--ink);
+				margin-right: 0.4rem;
+			}
+			@media (max-width: 560px) {
+				.fields { flex-wrap: wrap; }
+				.fields .field { flex-basis: 100%; border-right: 0; border-bottom: 1px solid var(--rule); }
+				.fields .field:last-child { border-bottom: 0; }
+				.fields-5 .field { flex-basis: 50%; border-right: 1px solid var(--rule); }
+				.fields-5 .field:nth-child(2n) { border-right: 0; }
+			}
+			.legend {
+				margin-top: 2rem;
+				background: var(--stock-tint);
+				border: 1px solid var(--rule-faint);
+				padding: 1rem 1.2rem;
+			}
+			.legend h3 {
+				font-family: 'Archivo Narrow', sans-serif;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.82rem;
+				margin: 0 0 0.4rem;
+			}
+			.legend p { margin: 0; font-size: 0.9rem; max-width: 75ch; }
+
+			/* ---- Tables ---- */
+			.table-intro { max-width: 70ch; margin-bottom: 1.4rem; }
+			.table-wrap, table.ct { width: 100%; }
+			table.ct {
+				border-collapse: collapse;
+				border-top: 3px double var(--rule);
+				border-bottom: 3px double var(--rule);
+				font-size: 0.93rem;
+			}
+			table.ct th, table.ct td {
+				text-align: left;
+				padding: 0.55rem 0.9rem 0.55rem 0;
+				border-bottom: 1px solid var(--rule-faint);
+				vertical-align: top;
+			}
+			table.ct thead th {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.78rem;
+				border-bottom: 1px solid var(--rule);
+			}
+			table.ct tbody th { font-weight: 600; }
+			table.ct tbody tr:nth-child(even) { background: var(--stock-tint); }
+			table.ct tbody tr:nth-child(even) th,
+			table.ct tbody tr:nth-child(even) td { padding-left: 0.5rem; }
+			table.ct tbody tr:nth-child(odd) th,
+			table.ct tbody tr:nth-child(odd) td { padding-left: 0.5rem; }
+			table.ct .num {
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				font-size: 0.88rem;
+				white-space: nowrap;
+			}
+			td.num, th.num { text-align: left; }
+			.fn {
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				color: var(--red);
+				text-decoration: none;
+				font-size: 0.72rem;
+				padding-left: 0.15rem;
+			}
+			.fn:hover, .fn:focus-visible { text-decoration: underline; }
+			.req { color: var(--red); font-size: 0.7rem; vertical-align: super; padding-left: 0.2rem; }
+			.table-foot { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.8rem; }
+			.params code { overflow-wrap: anywhere; }
+
+			@media (max-width: 720px) {
+				.panel { overflow-x: hidden; }
+				table.ct, table.ct thead, table.ct tbody, table.ct tr, table.ct th, table.ct td {
+					display: block;
+				}
+				table.ct thead { display: none; }
+				table.ct tbody tr { padding: 0.7rem 0.5rem; border-bottom: 1px solid var(--rule-faint); }
+				table.ct th, table.ct td { border: 0; padding: 0.1rem 0; }
+				table.ct td.num { font-size: 1rem; }
+			}
+
+			/* ---- Notes ---- */
+			.notes { list-style: none; margin: 0; padding: 0; }
+			.notes li p { margin: 0; }
+			.notes li {
+				display: grid;
+				grid-template-columns: 2rem minmax(0, 1fr);
+				gap: 0.6rem;
+				padding: 0.7rem 0;
+				border-bottom: 1px solid var(--rule-faint);
+				font-size: 0.93rem;
+				max-width: 80ch;
+			}
+			.notes li:first-child { border-top: 3px double var(--rule); }
+			.note-n {
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				color: var(--red);
+				border: 1px solid var(--red);
+				width: 1.5rem;
+				height: 1.5rem;
+				display: grid;
+				place-items: center;
+				font-size: 0.78rem;
+			}
+			.notes li:target { background: var(--stock-tint); }
+
+			/* ---- Manual TOC ---- */
+			.manual-toc { background: var(--teal); color: var(--on-teal); }
+			.toc-intro { max-width: 62ch; margin-block: 0 1.6rem; color: var(--on-teal-soft); }
+			.toc { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; }
+			@media (max-width: 800px) { .toc { grid-template-columns: 1fr; } }
+			.toc a {
+				display: grid;
+				grid-template-columns: 2.4rem minmax(0, 1fr);
+				grid-template-rows: auto auto;
+				column-gap: 0.8rem;
+				padding: 0.85rem 0.3rem;
+				border-bottom: 1px solid color-mix(in srgb, var(--on-teal) 25%, transparent);
+				color: var(--on-teal);
+				text-decoration: none;
+			}
+			.toc a:hover, .toc a:focus-visible { background: color-mix(in srgb, var(--on-teal) 10%, transparent); }
+			.toc-n {
+				grid-row: span 2;
+				font-family: 'Fragment Mono', ui-monospace, monospace;
+				font-size: 1.15rem;
+				border: 1px solid color-mix(in srgb, var(--on-teal) 45%, transparent);
+				width: 2rem;
+				height: 2rem;
+				display: grid;
+				place-items: center;
+				align-self: start;
+			}
+			.toc-t {
+				font-family: 'Archivo Narrow', sans-serif;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				font-size: 1rem;
+			}
+			.toc-d { font-size: 0.86rem; color: var(--on-teal-soft); }
+
+			/* ---- Colophon ---- */
+			.colophon {
+				background: var(--teal-deep);
+				color: var(--on-teal-soft);
+				padding: 2rem clamp(1.25rem, 4vw, 3rem) 2.5rem;
+				font-size: 0.88rem;
+			}
+			.colophon p { max-width: 72ch; margin: 0 0 0.7rem; }
+			.colophon strong { color: var(--on-teal); }
+			.colophon a { color: var(--on-teal); }
+			.colophon code { color: var(--on-teal); }
+		</style>
+	</body>
+</html>

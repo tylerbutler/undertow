@@ -1,0 +1,180 @@
+/* The Undertow manual: Starlight themed as the reference card's backing
+   handbook. Same inks — card stock, blue-black table ink, handbook teal,
+   note red — same faces, double-rule tables. */
+
+:root {
+	--sl-font: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+	--sl-font-mono: 'Fragment Mono', ui-monospace, monospace;
+	--und-red: #b23a26;
+}
+
+/* Light: the printed page. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #d5e3e0;
+	--sl-color-accent: #0d5460;
+	--sl-color-accent-high: #0a434d;
+	--sl-color-white: #1c2427;
+	--sl-color-gray-1: #2c383d;
+	--sl-color-gray-2: #44525a;
+	--sl-color-gray-3: #5d6c73;
+	--sl-color-gray-4: #8b968f;
+	--sl-color-gray-5: #d9d5c6;
+	--sl-color-gray-6: #eceadf;
+	--sl-color-gray-7: #f0eee3;
+	--sl-color-black: #f5f3ea;
+	--sl-color-bg-sidebar: #f0eee3;
+	--sl-color-bg-nav: #0d5460;
+	--sl-color-hairline: rgba(28, 36, 39, 0.25);
+	--sl-color-hairline-light: rgba(28, 36, 39, 0.14);
+	--sl-color-hairline-shade: rgba(28, 36, 39, 0.25);
+}
+
+/* Dark: night ops in the same ink system. */
+:root[data-theme='dark'] {
+	--sl-color-accent-low: #0c3a41;
+	--sl-color-accent: #4fb0ae;
+	--sl-color-accent-high: #a9cccb;
+	--sl-color-white: #e6e2d3;
+	--sl-color-gray-1: #d5d1c2;
+	--sl-color-gray-2: #a8b4ae;
+	--sl-color-gray-3: #7e8c88;
+	--sl-color-gray-4: #4c5a58;
+	--sl-color-gray-5: #26343a;
+	--sl-color-gray-6: #16232a;
+	--sl-color-gray-7: #142026;
+	--sl-color-black: #121d21;
+	--sl-color-bg-sidebar: #101a1f;
+	--sl-color-bg-nav: #093a42;
+	--sl-color-hairline: rgba(230, 226, 211, 0.3);
+	--sl-color-hairline-light: rgba(230, 226, 211, 0.14);
+	--sl-color-hairline-shade: rgba(230, 226, 211, 0.3);
+	--und-red: #e0694f;
+}
+
+/* Header: the handbook cover band. */
+header.header {
+	border-bottom: 3px double var(--sl-color-hairline);
+}
+header.header .site-title {
+	font-family: 'Archivo Narrow', sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: #f2efe4;
+}
+header.header a,
+header.header .social-icons a {
+	color: #f2efe4;
+}
+
+/* Header controls keep readable contrast against the teal nav in BOTH themes. */
+header.header site-search button[data-open-modal] {
+	background-color: color-mix(in srgb, #f2efe4 12%, transparent);
+	border-color: color-mix(in srgb, #f2efe4 35%, transparent);
+	color: #f2efe4;
+}
+header.header site-search kbd {
+	background-color: color-mix(in srgb, #f2efe4 18%, transparent);
+	color: #f2efe4;
+}
+header.header starlight-theme-select,
+header.header starlight-theme-select select,
+header.header starlight-theme-select svg {
+	color: #f2efe4;
+}
+header.header starlight-theme-select select {
+	background-color: transparent;
+	border-color: color-mix(in srgb, #f2efe4 35%, transparent);
+}
+
+/* Sidebar: the manual's tab index. */
+nav.sidebar .top-level > li > a,
+nav.sidebar summary .group-label span {
+	font-family: 'Archivo Narrow', sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-size: 0.85rem;
+}
+nav.sidebar a[aria-current='page'] {
+	background: var(--sl-color-text-accent);
+	color: var(--sl-color-black);
+	border-radius: 0;
+}
+nav.sidebar a {
+	border-radius: 0;
+}
+
+/* Headings: condensed grotesque caps, ruled like section heads. The page
+   title (h1#_top) sits outside .sl-markdown-content and needs naming. */
+h1#_top,
+.content-panel h1,
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+	font-family: 'Archivo Narrow', sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+.sl-markdown-content h2 {
+	border-bottom: 3px double var(--sl-color-hairline);
+	padding-bottom: 0.35rem;
+}
+
+/* Tables: the card's double-rule grammar. Wide tables scroll in place. */
+.sl-markdown-content table {
+	border-collapse: collapse;
+	border-top: 3px double var(--sl-color-hairline);
+	border-bottom: 3px double var(--sl-color-hairline);
+	display: block;
+	overflow-x: auto;
+	max-width: 100%;
+}
+.sl-markdown-content th {
+	font-family: 'Archivo Narrow', sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	font-size: 0.78rem;
+	border-bottom: 1px solid var(--sl-color-hairline);
+	background: transparent;
+}
+.sl-markdown-content td {
+	border: 0;
+	border-bottom: 1px solid var(--sl-color-hairline-light);
+}
+.sl-markdown-content tr:nth-child(2n) {
+	background: color-mix(in srgb, #7a9b57 9%, transparent);
+}
+
+/* Inline code and blocks: mono on stock tint, squared. */
+.sl-markdown-content code {
+	border-radius: 0;
+}
+.sl-markdown-content .expressive-code .frame {
+	border-radius: 0;
+	--code-background: var(--sl-color-gray-6);
+}
+
+/* Links underline like printed references. */
+.sl-markdown-content a {
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 2px;
+}
+
+/* Asides / callouts: squared, hairline, no heavy left border. */
+.sl-markdown-content .starlight-aside {
+	border: 1px solid var(--sl-color-hairline-light);
+	border-left-width: 1px;
+	border-radius: 0;
+	background: var(--sl-color-gray-6);
+}
+
+/* Pagination arrows: squared. */
+.pagination-links a {
+	border-radius: 0;
+	border: 1px solid var(--sl-color-hairline);
+	box-shadow: none;
+}

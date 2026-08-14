@@ -1,0 +1,6 @@
+# Netlify build for the project site (undertow.tylerbutler.com).
+# The site lives in site/; the rest of this repository is the .NET server.
+[build]
+  base = "site"
+  command = "pnpm build"
+  publish = "dist"

@@ -1,0 +1,339 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-13T00:00:00Z",
+  "title": "Design System: Undertow",
+  "extensions": {
+    "colorMeta": {
+      "stock": {
+        "role": "neutral",
+        "displayName": "Card Stock",
+        "canonical": "#f5f3ea",
+        "dark": "#121d21",
+        "tonalRamp": ["oklch(15% 0.012 95)", "oklch(26% 0.012 95)", "oklch(38% 0.012 95)", "oklch(50% 0.012 95)", "oklch(62% 0.012 95)", "oklch(73% 0.012 95)", "oklch(84% 0.012 95)", "oklch(95% 0.012 95)"]
+      },
+      "stock-tint": {
+        "role": "neutral",
+        "displayName": "Green-Card Tint",
+        "canonical": "#e9efdf",
+        "dark": "rgba(122, 155, 87, 0.1)",
+        "tonalRamp": ["oklch(15% 0.025 115)", "oklch(26% 0.025 115)", "oklch(38% 0.025 115)", "oklch(50% 0.025 115)", "oklch(62% 0.025 115)", "oklch(73% 0.025 115)", "oklch(84% 0.025 115)", "oklch(95% 0.025 115)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Table Ink",
+        "canonical": "#1c2427",
+        "dark": "#e6e2d3",
+        "tonalRamp": ["oklch(15% 0.012 220)", "oklch(26% 0.012 220)", "oklch(38% 0.012 220)", "oklch(50% 0.012 220)", "oklch(62% 0.012 220)", "oklch(73% 0.012 220)", "oklch(84% 0.012 220)", "oklch(95% 0.012 220)"]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#44525a",
+        "dark": "#a8b4ae",
+        "tonalRamp": ["oklch(15% 0.015 215)", "oklch(26% 0.015 215)", "oklch(38% 0.015 215)", "oklch(50% 0.015 215)", "oklch(62% 0.015 215)", "oklch(73% 0.015 215)", "oklch(84% 0.015 215)", "oklch(95% 0.015 215)"]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "rgba(28, 36, 39, 0.35)",
+        "dark": "rgba(230, 226, 211, 0.4)",
+        "derivedFrom": "ink at 35% alpha; no ramp — it is an alpha derivation, not a hue"
+      },
+      "rule-faint": {
+        "role": "neutral",
+        "displayName": "Faint Rule",
+        "canonical": "rgba(28, 36, 39, 0.16)",
+        "dark": "rgba(230, 226, 211, 0.16)",
+        "derivedFrom": "ink at 16% alpha; no ramp — it is an alpha derivation, not a hue"
+      },
+      "teal": {
+        "role": "primary",
+        "displayName": "Handbook Teal",
+        "canonical": "#0d5460",
+        "dark": "#0c4750",
+        "tonalRamp": ["oklch(15% 0.055 208)", "oklch(26% 0.055 208)", "oklch(38% 0.055 208)", "oklch(50% 0.055 208)", "oklch(62% 0.055 208)", "oklch(73% 0.055 208)", "oklch(84% 0.055 208)", "oklch(95% 0.055 208)"]
+      },
+      "teal-deep": {
+        "role": "primary",
+        "displayName": "Cover Board Teal",
+        "canonical": "#0a434d",
+        "dark": "#093a42",
+        "tonalRamp": ["oklch(15% 0.05 208)", "oklch(26% 0.05 208)", "oklch(38% 0.05 208)", "oklch(50% 0.05 208)", "oklch(62% 0.05 208)", "oklch(73% 0.05 208)", "oklch(84% 0.05 208)", "oklch(95% 0.05 208)"]
+      },
+      "on-teal": {
+        "role": "primary",
+        "displayName": "Warm Cover White",
+        "canonical": "#f2efe4",
+        "dark": "#eae7da",
+        "tonalRamp": ["oklch(15% 0.014 95)", "oklch(26% 0.014 95)", "oklch(38% 0.014 95)", "oklch(50% 0.014 95)", "oklch(62% 0.014 95)", "oklch(73% 0.014 95)", "oklch(84% 0.014 95)", "oklch(95% 0.014 95)"]
+      },
+      "on-teal-soft": {
+        "role": "primary",
+        "displayName": "Faded Cover White",
+        "canonical": "#bcd7d6",
+        "dark": "#a9cccb",
+        "tonalRamp": ["oklch(15% 0.03 190)", "oklch(26% 0.03 190)", "oklch(38% 0.03 190)", "oklch(50% 0.03 190)", "oklch(62% 0.03 190)", "oklch(73% 0.03 190)", "oklch(84% 0.03 190)", "oklch(95% 0.03 190)"]
+      },
+      "red": {
+        "role": "secondary",
+        "displayName": "Marking Red",
+        "canonical": "#b23a26",
+        "dark": "#e0694f",
+        "tonalRamp": ["oklch(15% 0.15 32)", "oklch(26% 0.15 32)", "oklch(38% 0.15 32)", "oklch(50% 0.15 32)", "oklch(62% 0.15 32)", "oklch(73% 0.15 32)", "oklch(84% 0.15 32)", "oklch(95% 0.15 32)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The product name on the teal cover band. Uppercase. Exactly one per page.",
+        "case": "uppercase"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section-bar titles, always reversed out of a solid ink bar and preceded by a mono §-number. Uppercase.",
+        "case": "uppercase"
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Manual-index chapter titles; the same face at 0.82rem sets figure numbers and the legend heading. Uppercase.",
+        "case": "uppercase"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All prose. Measure capped in ch per context: 58ch in procedure steps, 60ch captions, 62ch cover subtitle, 70ch table intros, 72ch colophon, 75ch legend, 80ch notes.",
+        "case": "sentence"
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Anything that names rather than says — table column headers, buttons, copy button, spec-strip items, nav links, the stamp. Ranges 0.72–0.95rem with 0.07–0.1em tracking. Uppercase.",
+        "case": "uppercase"
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Every machine value — commands, parameter keys, defaults, results, topics, footnote letters, §-numbers, chapter numbers. 0.86em inline, 0.88rem in numeric cells, 1.3rem in step numbers.",
+        "case": "as-authored"
+      },
+      "doc-code": {
+        "displayName": "Document Code",
+        "purpose": "Printed identifiers only — UND-1 · REFERENCE DATA, FIRST EDITION, REV. 2026-08, figure bracket labels. Never a marketing phrase.",
+        "case": "uppercase"
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-settle",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The system's only easing curve. Carries the first-panel unfold (0.7s) and the COPIED stamp's scale-in (0.25s)."
+      },
+      {
+        "name": "ease-out-fast",
+        "value": "ease-out 0.15s",
+        "purpose": "Skip-link slide from top: -3rem to top: 1rem on focus."
+      },
+      {
+        "name": "unfold",
+        "value": "transform: perspective(1400px) rotateX(-5deg) → rotateX(0) over 0.7s",
+        "purpose": "The fold gesture. Applied to the first panel only, via IntersectionObserver with rootMargin '0px 0px -8% 0px'. Gated on prefers-reduced-motion; content is visible by default and motion only adds."
+      },
+      {
+        "name": "stamp-in",
+        "value": "rotate(-7deg) scale(1.6) opacity 0 → rotate(-7deg) scale(1) opacity 1 over 0.25s",
+        "purpose": "The COPIED rubber stamp on successful clipboard write; removed after 1400ms."
+      }
+    ],
+    "breakpoints": [
+      { "name": "stack-cmd", "value": "560px", "purpose": "Command boxes turn vertical; field-diagram cells wrap full-width (five-cell diagrams wrap two-up)." },
+      { "name": "detable", "value": "720px", "purpose": "Data tables de-table into stacked blocks; the printed page frame is hidden." },
+      { "name": "toc-single", "value": "800px", "purpose": "Manual index collapses from two columns to one." },
+      { "name": "split-single", "value": "900px", "purpose": "Two-column panel splits collapse to a single column." }
+    ],
+    "structure": {
+      "measure": "1120px content measure, centered, inside full-bleed panels",
+      "panelPadding": "clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 3rem)",
+      "splitGrid": "minmax(0, 7fr) minmax(0, 5fr); 6fr/5fr on the procedure panel",
+      "printedFrame": "position: fixed; inset: 10px; 1px solid rule + 1px faint outline at 3px offset; z-index 10; hidden ≤720px",
+      "crease": "14px gradient band between panels, over a 1px faint hairline",
+      "stickyOffset": "scroll-padding-top: 4rem with scroll-behavior: smooth"
+    }
+  },
+  "components": [
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Primary action inside a teal band — reversed out of the cover ground. Square, condensed caps.",
+      "html": "<a class=\"ds-btn ds-btn-solid\" href=\"#procedure\">Operating procedure&nbsp;→&nbsp;§1</a>",
+      "css": ".ds-btn { display: inline-block; font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.95rem; text-decoration: none; padding: 0.75rem 1.4rem; border: 1px solid #f2efe4; border-radius: 0; } .ds-btn-solid { background: #f2efe4; color: #0a434d; } .ds-btn-solid:hover, .ds-btn-solid:focus-visible { background: #fff; border-color: #fff; }"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary action inside a teal band — outline only, fills faintly on hover.",
+      "html": "<a class=\"ds-btn ds-btn-line\" href=\"/manual/\">Open the manual</a>",
+      "css": ".ds-btn { display: inline-block; font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.95rem; text-decoration: none; padding: 0.75rem 1.4rem; border: 1px solid #f2efe4; border-radius: 0; } .ds-btn-line { background: transparent; color: #f2efe4; } .ds-btn-line:hover, .ds-btn-line:focus-visible { background: color-mix(in srgb, #f2efe4 14%, transparent); }"
+    },
+    {
+      "name": "Section Bar",
+      "kind": "custom",
+      "refersTo": "section-bar",
+      "description": "Opens every content panel: solid ink rectangle with a mono §-number and condensed-caps title reversed in stock.",
+      "html": "<h2 class=\"ds-bar\"><span class=\"ds-bar-n\">§3</span> Conformance record</h2>",
+      "css": ".ds-bar { font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; font-size: 1rem; background: #1c2427; color: #f5f3ea; padding: 0.5rem 0.9rem; margin: 0 0 1.6rem; display: flex; gap: 0.8rem; align-items: baseline; border-radius: 0; } .ds-bar-n { font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.8rem; color: color-mix(in srgb, #f5f3ea 75%, #1c2427); }"
+    },
+    {
+      "name": "Command Box",
+      "kind": "custom",
+      "refersTo": "command-box",
+      "description": "The quickstart primitive: tinted rule-bordered box holding a wrapping mono command and a divided copy button.",
+      "html": "<div class=\"ds-cmd\"><code>docker compose up -d --wait</code><button class=\"ds-copy\" type=\"button\">Copy</button></div>",
+      "css": ".ds-cmd { display: flex; align-items: stretch; border: 1px solid rgba(28,36,39,0.35); background: #e9efdf; border-radius: 0; } .ds-cmd code { flex: 1; font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.86em; color: #1c2427; padding: 0.6rem 0.8rem; white-space: pre-wrap; overflow-wrap: anywhere; } .ds-copy { font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; border: 0; border-left: 1px solid rgba(28,36,39,0.35); border-radius: 0; background: transparent; color: #1c2427; padding: 0 0.9rem; cursor: pointer; } .ds-copy:hover, .ds-copy:focus-visible { background: #1c2427; color: #f5f3ea; } @media (max-width: 560px) { .ds-cmd { flex-direction: column; } .ds-copy { border-left: 0; border-top: 1px solid rgba(28,36,39,0.35); padding: 0.45rem 0.9rem; text-align: center; } }"
+    },
+    {
+      "name": "Copy Stamp",
+      "kind": "custom",
+      "refersTo": "stamp",
+      "description": "The signature feedback gesture — a rotated red rubber stamp that scales in on successful copy and clears after 1400ms.",
+      "html": "<span class=\"ds-stamp\">COPIED</span>",
+      "css": ".ds-stamp { display: inline-block; font-family: 'Archivo Narrow', sans-serif; font-size: 0.72rem; letter-spacing: 0.1em; color: #b23a26; border: 2px solid #b23a26; border-radius: 0; padding: 0.1rem 0.35rem; background: #f5f3ea; transform: rotate(-7deg); animation: ds-stamp-in 0.25s cubic-bezier(0.16, 1, 0.3, 1); } @keyframes ds-stamp-in { from { transform: rotate(-7deg) scale(1.6); opacity: 0; } to { transform: rotate(-7deg) scale(1); opacity: 1; } }"
+    },
+    {
+      "name": "Data Table",
+      "kind": "card",
+      "refersTo": "table-header-cell",
+      "description": "The page's core primitive: double-ruled top and bottom, condensed-caps headers, green-card tint on even rows, mono values, red footnote markers.",
+      "html": "<table class=\"ds-table\"><thead><tr><th scope=\"col\">Suite</th><th scope=\"col\">Gate</th><th scope=\"col\" class=\"ds-num\">Result</th></tr></thead><tbody><tr><th scope=\"row\">Routerlicious conformance<sup><a class=\"ds-fn\" href=\"#note-a\">a</a></sup></th><td><code>just test-dual-mode</code></td><td class=\"ds-num\">38 pass</td></tr><tr><th scope=\"row\">Readiness checks</th><td><code>startup probes</code></td><td class=\"ds-num\">8 / 8</td></tr></tbody></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; border-top: 3px double rgba(28,36,39,0.35); border-bottom: 3px double rgba(28,36,39,0.35); font-family: 'Archivo Variable', Archivo, system-ui, sans-serif; font-size: 0.93rem; color: #1c2427; } .ds-table th, .ds-table td { text-align: left; vertical-align: top; padding: 0.55rem 0.9rem 0.55rem 0.5rem; border-bottom: 1px solid rgba(28,36,39,0.16); } .ds-table thead th { font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; border-bottom: 1px solid rgba(28,36,39,0.35); } .ds-table tbody th { font-weight: 600; } .ds-table tbody tr:nth-child(even) { background: #e9efdf; } .ds-table .ds-num { font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.88rem; white-space: nowrap; } .ds-table code { font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.86em; } .ds-fn { font-family: 'Fragment Mono', ui-monospace, monospace; color: #b23a26; text-decoration: none; font-size: 0.72rem; padding-left: 0.15rem; } .ds-fn:hover, .ds-fn:focus-visible { text-decoration: underline; }"
+    },
+    {
+      "name": "Field Diagram",
+      "kind": "custom",
+      "refersTo": "field-cell",
+      "description": "The signature component: a notched label bracket over a row of rule-divided cells, captioned with a condensed-caps figure number.",
+      "html": "<figure class=\"ds-fig\"><div class=\"ds-fig-bracket\"><span>Socket.IO event frame</span></div><div class=\"ds-fields\"><div class=\"ds-field ds-field-fixed\"><code class=\"ds-field-k\">4</code><p class=\"ds-field-d\">Engine.IO<br>MESSAGE</p></div><div class=\"ds-field ds-field-fixed\"><code class=\"ds-field-k\">2</code><p class=\"ds-field-d\">Socket.IO<br>EVENT</p></div><div class=\"ds-field\"><code class=\"ds-field-k\">[\"op\", …payload]</code><p class=\"ds-field-d\">JSON array — event name, then arguments</p></div></div><figcaption class=\"ds-fig-cap\"><span class=\"ds-fig-n\">Fig. 2</span> A 42[\"op\",…] frame as the drivers send it.</figcaption></figure>",
+      "css": ".ds-fig { margin: 0; font-family: 'Archivo Variable', Archivo, system-ui, sans-serif; color: #1c2427; } .ds-fig-bracket { border: 1px solid rgba(28,36,39,0.35); border-bottom: 0; height: 1.7rem; position: relative; } .ds-fig-bracket span { position: absolute; left: 50%; top: -0.05rem; transform: translate(-50%, -50%); background: #f5f3ea; padding: 0 0.7rem; font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: #44525a; white-space: nowrap; } .ds-fields { display: flex; border: 1px solid rgba(28,36,39,0.35); border-top: 0; } .ds-field { flex: 1; min-width: 0; padding: 0.8rem 0.8rem 0.9rem; border-right: 1px solid rgba(28,36,39,0.35); } .ds-field:last-child { border-right: 0; } .ds-field-fixed { flex: 0 0 auto; } .ds-field-k { display: block; font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.95rem; overflow-wrap: break-word; } .ds-field-d { margin: 0.4rem 0 0; font-size: 0.78rem; line-height: 1.4; color: #44525a; } .ds-fig-cap { font-size: 0.85rem; color: #44525a; margin-top: 0.6rem; max-width: 60ch; } .ds-fig-n { font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #1c2427; margin-right: 0.4rem; }"
+    },
+    {
+      "name": "Footnote Row",
+      "kind": "custom",
+      "refersTo": "footnote-marker",
+      "description": "Divergence notes: a red outlined square holding the note letter beside prose capped at 80ch; opened by a double rule.",
+      "html": "<ol class=\"ds-notes\"><li id=\"note-b\"><span class=\"ds-note-n\">b</span><p>The single non-passing parity case is an <em>intentional</em> 401 response, recorded as ADR-009.</p></li></ol>",
+      "css": ".ds-notes { list-style: none; margin: 0; padding: 0; font-family: 'Archivo Variable', Archivo, system-ui, sans-serif; color: #1c2427; } .ds-notes li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 0.6rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(28,36,39,0.16); font-size: 0.93rem; max-width: 80ch; } .ds-notes li:first-child { border-top: 3px double rgba(28,36,39,0.35); } .ds-notes li p { margin: 0; } .ds-note-n { font-family: 'Fragment Mono', ui-monospace, monospace; color: #b23a26; border: 1px solid #b23a26; border-radius: 0; width: 1.5rem; height: 1.5rem; display: grid; place-items: center; font-size: 0.78rem; } .ds-notes li:target { background: #e9efdf; }"
+    },
+    {
+      "name": "Topbar Navigation",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Sticky stock-grounded bar closed by a double rule: doc code left, condensed-caps links right with a red hover underline.",
+      "html": "<header class=\"ds-topbar\"><span class=\"ds-doc-code\">UND-1 · REFERENCE DATA</span><nav><a href=\"/manual/\">Manual</a><a href=\"#\">Source</a></nav></header>",
+      "css": ".ds-topbar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 1.5rem; background: #f5f3ea; border-bottom: 3px double rgba(28,36,39,0.35); } .ds-doc-code { font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: #44525a; } .ds-topbar nav { display: flex; gap: 1.4rem; } .ds-topbar nav a { font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; font-size: 0.85rem; color: #1c2427; text-decoration: none; border-bottom: 2px solid transparent; } .ds-topbar nav a:hover, .ds-topbar nav a:focus-visible { border-bottom-color: #b23a26; }"
+    },
+    {
+      "name": "Manual Index Item",
+      "kind": "custom",
+      "refersTo": "toc-item",
+      "description": "A chapter row on the teal band: outlined square number, condensed-caps title, faded description, hairline separator.",
+      "html": "<ul class=\"ds-toc\"><li><a href=\"/manual/configuration/\"><span class=\"ds-toc-n\">3</span><span class=\"ds-toc-t\">Configuration</span><span class=\"ds-toc-d\">The full UNDERTOW_* parameter table, precedence, and fallbacks.</span></a></li></ul>",
+      "css": ".ds-toc { list-style: none; margin: 0; padding: 1.5rem; background: #0d5460; } .ds-toc a { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 0.8rem; padding: 0.85rem 0.3rem; border-bottom: 1px solid color-mix(in srgb, #f2efe4 25%, transparent); color: #f2efe4; text-decoration: none; } .ds-toc a:hover, .ds-toc a:focus-visible { background: color-mix(in srgb, #f2efe4 10%, transparent); } .ds-toc-n { grid-row: span 2; font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 1.15rem; border: 1px solid color-mix(in srgb, #f2efe4 45%, transparent); border-radius: 0; width: 2rem; height: 2rem; display: grid; place-items: center; align-self: start; } .ds-toc-t { font-family: 'Archivo Narrow', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 1rem; } .ds-toc-d { font-family: 'Archivo Variable', Archivo, system-ui, sans-serif; font-size: 0.86rem; color: #bcd7d6; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Programmer's Reference Card",
+    "overview": "Undertow presents itself the way a DEC handbook or an IBM green card presents a machine: as reference data. Not a pitch with tables attached — the tables ARE the page. An operating procedure numbered in a box, byte-field diagrams drawn from the real frame formats, a conformance record with lettered footnotes, a parameter table with a required marker. The reader is assumed to be someone who will run the thing, and the page's job is to hand them the numbers without ceremony.\n\nThe material is printed card. Pale stock, blue-black table ink, and a deep handbook teal that carries the cover band, the manual index, and the colophon — the parts a real card would print on its heavier folded cover. Alternating table rows take a faint green-card tint. Red is a marking pen, not a color: it appears on footnote markers, the required-parameter dot, and the rubber stamp that lands when a command is copied. Nothing floats; nothing glows. Depth comes from rules, double rules, a printed frame inset from the viewport edge, and fold creases between panels.\n\nThis world exists by refusing the dev-tool default it would otherwise inherit: no dark hero with an animated terminal, no three-across feature grid with glyph icons, no gradient accents, no product screenshot standing in for evidence. Density is high and deliberate — a reader scanning for UNDERTOW_MAX_FRAME_BYTES should find it in one pass, and a reader who wants the prose can follow it into the manual, which is themed as the card's backing handbook in the same inks and faces.",
+    "keyCharacteristics": [
+      "Tables and rules are the layout system, never decoration",
+      "Two grounds only: pale card stock and handbook teal",
+      "Squared corners everywhere; radius is zero by rule",
+      "Flat by construction — no shadows anywhere in the system",
+      "Condensed grotesque caps label; mono carries every machine value",
+      "Red is reserved for exceptions, notes, and stamps"
+    ],
+    "rules": [
+      {
+        "name": "The Two-Ground Rule",
+        "body": "Every surface is either card stock or handbook teal. Teal grounds only the cover, the manual index, the colophon, and the docs header band; the body of the card is always stock. There is no third background color, no card-on-card layering, and no tinted section to signal importance.",
+        "section": "colors"
+      },
+      {
+        "name": "The Marking-Pen Rule",
+        "body": "Red marks exceptions only — footnotes, required parameters, stamps, and hover states. It never fills a region, never sets a heading, and never indicates success. If a new element wants red, ask whether it is an exception; if it isn't, it gets ink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tint-Means-Machine Rule",
+        "body": "The green-card tint appears on content a machine produced or consumes (command boxes, transcript legends) and on alternating table rows for scan assistance. It is never used to make a block look important.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three-Faces Rule",
+        "body": "Each face has one job and never takes another's. Archivo Narrow caps label; Archivo sets prose; Fragment Mono carries anything a machine produced or consumes. A heading never uses mono for flavor, and a command never renders in the body face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Caps-Are-Structural Rule",
+        "body": "Uppercase marks a label, a section bar, a button, or a document code. Prose is never uppercased for emphasis, and a sentence never appears in Archivo Narrow.",
+        "section": "typography"
+      },
+      {
+        "name": "The Document-Code Rule",
+        "body": "The small mono caps line above the title is a printed document identifier — edition, revision, doc number, figure label. It carries identifiers only. The moment it would carry a marketing phrase or a value proposition, it has stopped being a doc code and must be deleted rather than reworded.",
+        "section": "typography"
+      },
+      {
+        "name": "The Crease Rule",
+        "body": "Panels are separated by a 14px fold crease — a shadow-to-highlight gradient over a faint hairline — never by empty whitespace and never by a card edge. The crease is what makes the stack read as one folded card rather than a sequence of sections.",
+        "section": "layout"
+      },
+      {
+        "name": "The Measure Rule",
+        "body": "No prose block runs unconstrained. Every text container carries an explicit ch cap sized to its role (58–80ch), so the 1120px panel never produces a 1120px line.",
+        "section": "layout"
+      },
+      {
+        "name": "The No-Shadow Rule",
+        "body": "No box-shadow on any element, in any state, ever. A component that seems to need elevation needs a rule, a tint, or a reversed ground instead. When adopting a third-party component, strip its shadow explicitly.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Squared Rule",
+        "body": "Radius is 0. There is no small/medium/large radius scale because there is no radius. Any imported component gets its corners squared before it ships.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Double-Rule Rule",
+        "body": "A 3px double rule marks the outer boundary of a structure — the top and bottom of a table, the head of a procedure list or notes list, the underside of the topbar, an h2 in the manual. A 1px hairline separates items inside that structure. Never use double rules between rows; never close a table with a hairline.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Outline-Not-Fill Rule",
+        "body": "Numbered markers (steps, chapters, footnote letters) are outlined squares with transparent grounds, never filled chips.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do ground every new surface in either card stock or handbook teal, and reverse the type accordingly (ink on stock, cover white on teal).",
+      "Do open every content section with a solid ink section bar carrying a mono §-number.",
+      "Do close a table or a list group with 3px double rules and separate its rows with 1px hairlines.",
+      "Do set every machine value — commands, defaults, results, keys, topics — in Fragment Mono, and every label in Archivo Narrow 700 caps.",
+      "Do cap prose measure explicitly in ch (58–80ch by role) even inside a wide panel.",
+      "Do pair :hover with :focus-visible on every interactive element, as every component in the build does.",
+      "Do square the corners of any third-party component you adopt, and strip its shadow.",
+      "Do give a de-tabled mobile row an anchor: promote its mono result value to 1rem so the stack stays scannable.",
+      "Do let motion be optional — the build gates its unfold on prefers-reduced-motion and ships every panel visible by default."
+    ],
+    "donts": [
+      "Don't add a box-shadow, anywhere, in any state. Depth is rules, tint, and the crease.",
+      "Don't round a corner. There is no radius scale to reach for.",
+      "Don't use marking red for anything but exceptions, notes, required markers, stamps, and hover underlines — never for a heading, a fill, or a passing result.",
+      "Don't introduce a third background color, a card-on-card layer, or a tinted \"callout\" block to signal importance.",
+      "Don't separate panels with whitespace or a card edge; the crease is the separator.",
+      "Don't uppercase prose or set a sentence in Archivo Narrow.",
+      "Don't let the document-code line carry a marketing phrase. It holds identifiers — edition, revision, doc number, figure label — or it gets deleted.",
+      "Don't animate anything except the copy stamp, the single first-panel unfold, and the skip link. There is no scroll-driven choreography here.",
+      "Don't reach for glyph icons or an icon set; the system's only marks are outlined squares, rules, brackets, and the rotated stamp.",
+      "Don't state a number the repository can't back. Result counts on this page trace to the conformance record, and the fixtures — not the card — are the authority."
+    ]
+  }
+}
