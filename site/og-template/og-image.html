@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face {
+    font-family: 'Archivo Narrow';
+    font-weight: 700;
+    src: url('../node_modules/@fontsource/archivo-narrow/files/archivo-narrow-latin-700-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Archivo';
+    font-weight: 400 700;
+    src: url('../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Fragment Mono';
+    font-weight: 400;
+    src: url('../node_modules/@fontsource/fragment-mono/files/fragment-mono-latin-400-normal.woff2') format('woff2');
+  }
+
+  :root {
+    --teal: #0d5460;
+    --teal-deep: #0a434d;
+    --on-teal: #f2efe4;
+    --on-teal-soft: #bcd7d6;
+    --rule: rgba(242, 239, 228, 0.55);
+    --rule-faint: rgba(242, 239, 228, 0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    background: var(--teal);
+    color: var(--on-teal);
+    font-family: 'Archivo', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Printed card frame: hairline + offset outline, like the site's .frame */
+  .card {
+    position: absolute;
+    inset: 26px;
+    border: 1px solid var(--rule);
+    outline: 1px solid var(--rule-faint);
+    outline-offset: 5px;
+    padding: 34px 46px 38px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doc-code {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Fragment Mono', monospace;
+    font-size: 19px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--on-teal-soft);
+    border-bottom: 1px solid var(--rule-faint);
+    padding-bottom: 16px;
+  }
+
+  .title-row {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+
+  h1 {
+    font-family: 'Archivo Narrow', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 168px;
+    line-height: 0.94;
+    letter-spacing: -0.01em;
+  }
+
+  .mark {
+    flex: 0 0 auto;
+    width: 148px;
+    height: 148px;
+  }
+
+  .sub {
+    font-size: 28px;
+    line-height: 1.42;
+    white-space: nowrap;
+    color: var(--on-teal);
+    padding-bottom: 34px;
+  }
+
+  .spec-strip {
+    list-style: none;
+    display: flex;
+    border-top: 3px double var(--rule);
+    border-bottom: 1px solid var(--rule-faint);
+  }
+  .spec-strip li {
+    font-family: 'Archivo Narrow', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 23px;
+    white-space: nowrap;
+    padding: 18px 24px 18px 0;
+    margin-right: 24px;
+    border-right: 1px solid var(--rule-faint);
+  }
+  .spec-strip li:last-child { border-right: 0; margin-right: 0; }
+  .url-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Fragment Mono', monospace;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    color: var(--on-teal-soft);
+    padding-top: 16px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="doc-code">
+      <span>UND-1 · Reference data</span>
+      <span>First edition · Rev. 2026-08</span>
+    </div>
+    <div class="title-row">
+      <svg class="mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="1" y="1" width="30" height="30" fill="none" stroke="#F2EFE4" stroke-width="1.2"/>
+        <path d="M9 8v10a7 7 0 0 0 14 0V8" fill="none" stroke="#F2EFE4" stroke-width="3.5" stroke-linecap="square"/>
+      </svg>
+      <h1>Undertow</h1>
+    </div>
+    <p class="sub">A Fluid Framework–compatible collaborative document service in&nbsp;.NET.</p>
+    <ul class="spec-strip">
+      <li>One process</li>
+      <li>One port</li>
+      <li>Two wire protocols</li>
+      <li>+ REST</li>
+    </ul>
+    <div class="url-row">
+      <span>undertow.tylerbutler.com</span>
+      <span>github.com/tylerbutler/undertow</span>
+    </div>
+  </div>
+</body>
+</html>

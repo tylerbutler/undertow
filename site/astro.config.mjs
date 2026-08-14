@@ -13,6 +13,15 @@ export default defineConfig({
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/tylerbutler/undertow' },
 			],
+			head: [
+				{
+					tag: 'meta',
+					attrs: { property: 'og:image', content: 'https://undertow.tylerbutler.com/og.png' },
+				},
+				{ tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+				{ tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+				{ tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+			],
 			customCss: [
 				'@fontsource/archivo-narrow/700.css',
 				'@fontsource-variable/archivo',
